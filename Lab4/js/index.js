@@ -34,18 +34,12 @@ function getLS(key) {
     return JSON.parse(localStorage.getItem(key));
 }
 
-$area.addEventListener('input', function (e) {
-    if(e.target.classList.contains('text')){
-        $selectedText = e.target;
-        boxes[selectedBoxIndex].text = $selectedText.value;
-    }
-    setLS('coords', boxes);
-});
+
 
 function boxGenerator(list) {
     let template = '';
     for (let i = 0; i < list.length; i++) {
-        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><p class="note">Заметка</p><textarea class="text"rows="10" cols="30" placeholder="Введите текст :" >'+list[i].text+'</textarea></div>';
+        template += '<div class="box" style="left: ' + list[i].x + 'px; top: ' + list[i].y + 'px;" data-index="' + i + '"><p class="note">Заметка</p><textarea class="text" text-index="' + i + '" rows="10" cols="30" placeholder="Введите текст :" >'+list[i].text+'</textarea></div>';
     }
     $area.innerHTML = template;
     boxWidth = document.querySelector('.box').offsetWidth;
@@ -85,7 +79,14 @@ $area.addEventListener('mousemove', function (e) {
         boxController(distance.x, distance.y);
     }
 });
-
+$area.addEventListener('input', function (e) {
+    if(e.target.classList.contains('text')){
+        $selectedText = e.target;
+        selectedBoxIndex = e.target.getAttribute('text-index');
+        boxes[selectedBoxIndex].text = $selectedText.value;
+    }
+    setLS('coords', boxes);
+});
 $addBtn.addEventListener('click', function () {
     boxes.push({
         x: 0,
